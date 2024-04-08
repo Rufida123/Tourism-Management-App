@@ -12,12 +12,13 @@ class SignUpProviderRequestModel {
       required this.confirmPassword,
       required this.commercialNumber});
 
-  Map<String, dynamic> toJson() {
+  Map<String, String> toJson() {
     return {
       'provider_name': Name,
       'email': email,
       'password': password,
       'password confirmation': confirmPassword,
+      'commercial_register': commercialNumber
     };
   }
 }

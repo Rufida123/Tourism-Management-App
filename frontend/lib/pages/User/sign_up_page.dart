@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/components/navigation_service.dart';
+import 'package:tourism_app/pages/User/account_verification.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_state.dart';
-import 'package:tourism_app/pages/User/login_page.dart';
 
 class UserSignUpPage extends StatelessWidget {
   UserSignUpPage({Key? key}) : super(key: key);
@@ -226,7 +226,7 @@ class UserSignUpPage extends StatelessWidget {
   Widget _buildLoginButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        BlocProvider.of<SignUpUserCubit>(context).cubitSignUP(
+        BlocProvider.of<SignUpUserCubit>(context).cubitUserSignUP(
             firstNameController.text,
             lastNameController.text,
             emailController.text,
@@ -235,7 +235,7 @@ class UserSignUpPage extends StatelessWidget {
             phoneController.text);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UserLoginPage()),
+          MaterialPageRoute(builder: (context) => UserAccVerification()),
         );
       },
       style: ElevatedButton.styleFrom(

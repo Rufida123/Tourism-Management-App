@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/components/navigation_service.dart';
+import 'package:tourism_app/pages/Service_provider/account_verification.dart';
 import 'package:tourism_app/pages/Service_provider/cubits/sign_up_cubit/sign_up_cubit.dart';
 import 'package:tourism_app/pages/Service_provider/cubits/sign_up_cubit/sign_up_state.dart';
 
@@ -212,6 +213,10 @@ class ProviderSignUpPage extends StatelessWidget {
             passwordController.text,
             confirmPasswordController.text,
             commercialNumberController.text);
+             Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProviderAccVerification()),
+        );
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),

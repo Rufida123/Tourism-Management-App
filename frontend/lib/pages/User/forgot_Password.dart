@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tourism_app/pages/User/verfication.dart';
+import 'package:tourism_app/pages/User/password_verfication.dart';
 
 class UserForgotPassword extends StatelessWidget {
   @override
@@ -46,7 +46,7 @@ class UserForgotPassword extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UserVerification()),
+                          builder: (context) => UserPassVerification()),
                     );
                   },
                   child: Text(

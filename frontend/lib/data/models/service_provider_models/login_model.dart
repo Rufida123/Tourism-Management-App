@@ -4,7 +4,7 @@ class LoginProviderRequestModel {
 
   LoginProviderRequestModel({required this.email, required this.password});
 
-  Map<String, dynamic> toJson() {
+  Map<String, String> toJson() {
     return {
       'email': email,
       'password': password,

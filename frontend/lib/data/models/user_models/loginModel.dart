@@ -4,7 +4,7 @@ class LoginUserRequestModel {
 
   LoginUserRequestModel({required this.email, required this.password});
 
-  Map<String, dynamic> toJson() {
+  Map<String, String> toJson() {
     return {
       'email': email,
       'password': password,
@@ -22,6 +22,8 @@ class LoginUserRespnseModel {
 
   factory LoginUserRespnseModel.fromJson(Map<String, dynamic> json) {
     return LoginUserRespnseModel(
-        token: json['token'], message: json['message'], status: json['status']);
+        token: json['token'],
+        message: json['message'].toString(),
+        status: json['status']);
   }
 }

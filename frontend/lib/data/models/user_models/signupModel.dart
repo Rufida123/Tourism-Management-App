@@ -14,7 +14,7 @@ class SignUpUserRequestModel {
       required this.confirmPassword,
       required this.phone});
 
-  Map<String, dynamic> toJson() {
+  Map<String, String> toJson() {
     return {
       'first_name': firstName,
       'last_name': lastName,
@@ -31,7 +31,7 @@ class SignUPUserResponseModel {
 
   SignUPUserResponseModel({required this.message});
 
-  factory SignUPUserResponseModel.fromJson(Map<String, dynamic> json) {
-    return SignUPUserResponseModel(message: json['message']);
+  factory SignUPUserResponseModel.fromJson(Map<String, String> json) {
+    return SignUPUserResponseModel(message: json['message'].toString());
   }
 }

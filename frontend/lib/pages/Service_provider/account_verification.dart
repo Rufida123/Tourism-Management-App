@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tourism_app/pages/User/reset_password.dart';
+import 'package:tourism_app/pages/Service_provider/login_page.dart';
 
-class UserVerification extends StatelessWidget {
-  const UserVerification({Key? key}) : super(key: key);
+class ProviderAccVerification extends StatelessWidget {
+  const ProviderAccVerification({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class UserVerification extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => UserResetPassword()),
+                        builder: (context) => ProviderLoginPage()),
                   );
                 },
                 child: Text(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_app/pages/Service_provider/reset_password.dart';
 
-class ProviderVerification extends StatelessWidget {
-  const ProviderVerification({Key? key}) : super(key: key);
+class ProviderPassVerification extends StatelessWidget {
+  const ProviderPassVerification({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

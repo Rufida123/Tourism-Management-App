@@ -7,7 +7,7 @@ class SignUpUserCubit extends Cubit<SignUpUserState> {
   final SignUpUserWeb signUpUserWeb;
   SignUpUserCubit(this.signUpUserWeb) : super(SignUpUserInitial());
 
-  Future<void> cubitSignUP(String firstName, String lastName, String email,
+  Future<void> cubitUserSignUP(String firstName, String lastName, String email,
       String password, String confirmPassword, String phone) async {
     emit(SignUpUserLoading());
     try {
