@@ -8,7 +8,7 @@ import 'package:tourism_app/data/models/service_provider_models/login_model.dart
 class LoginProviderWeb {
   Future<LoginProviderResponseModel> loginProvider(
       String email, String password) async {
-    final url = Uri.parse('$baseUrl/register_service_provider');
+    final url = Uri.parse('$baseUrl/login_provider');
     final response = await http.post(
       url,
       headers: {

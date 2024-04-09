@@ -6,7 +6,7 @@ import 'package:tourism_app/data/models/service_provider_models/sign_up_model.da
 class SignUpProviderWeb {
   Future<SignUpProviderResponseModel> SignUpProvider(String Name, String email,
       String password, String confirmPassword, String commercialNumber) async {
-    final url = Uri.parse('$baseUrl/register');
+    final url = Uri.parse('$baseUrl/register_service_provider');
     final response = await http.post(
       url,
       headers: {

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tourism_app/constants/constants.dart';
-import 'package:tourism_app/data/models/service_provider_models/login_model.dart';
 import 'package:tourism_app/data/models/user_models/loginModel.dart';
 
 class LoginUserWeb {
@@ -11,21 +10,24 @@ class LoginUserWeb {
     final url = Uri.parse('$baseUrl/login_user');
     final response = await http.post(
       url,
-      headers: {
+      headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(
-          LoginProviderRequestModel(email: email, password: password).toJson()),
+          LoginUserRequestModel(email: email, password: password).toJson()),
     );
 
     if (response.statusCode == 200) {
-      final info = jsonDecode(response.body);
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', info['token']);
-      await prefs.setString('message', info['message']);
-      await prefs.setInt('status', info['status']);
+      final responseBody = jsonDecode(response.body);
 
-      return LoginUserRespnseModel.fromJson(info);
+      final String token = responseBody['data'];
+      final String message = responseBody['message'];
+      final int status = responseBody['status'];
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+      return LoginUserRespnseModel(
+          message: message, token: token, status: status);
     } else {
       print(response.statusCode.toString());
       throw Exception('Failed to login');

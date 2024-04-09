@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/components/navigation_service.dart';
-import 'package:tourism_app/pages/User/account_verification.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_state.dart';
 
@@ -38,16 +37,23 @@ class UserSignUpPage extends StatelessWidget {
         if (state is SignUpUserLoading) {
           isLoading = true;
         } else if (state is SignUpUserSuccess) {
-          Navigator.pushNamed(context, '/ServiceProviding');
+          Navigator.pushNamed(context, '/UserAccVerification');
           isLoading = false;
-        } else if (state is SignUpUserFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Signup failed: ${state.errorMessage}'),
+              content:
+                  Text(state.user.message), // Use the message from the model
               duration: Duration(seconds: 2),
             ),
           );
+        } else if (state is SignUpUserFailure) {
           isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message), // Use the message from the model
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -227,16 +233,12 @@ class UserSignUpPage extends StatelessWidget {
     return ElevatedButton(
       onPressed: () async {
         BlocProvider.of<SignUpUserCubit>(context).cubitUserSignUP(
+            emailController.text,
             firstNameController.text,
             lastNameController.text,
-            emailController.text,
             passwordController.text,
             confirmPasswordController.text,
             phoneController.text);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => UserAccVerification()),
-        );
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),

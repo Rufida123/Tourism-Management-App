@@ -7,12 +7,12 @@ class SignUpProviderCubit extends Cubit<SignUpProviderState> {
   final SignUpProviderWeb signUpProviderWeb;
   SignUpProviderCubit(this.signUpProviderWeb) : super(SignUpProviderInitial());
 
-  Future<void> cubitProviderSignUP(String Name, String email, String password,
+  Future<void> cubitProviderSignUP(String email, String Name, String password,
       String confirmPassword, String commercialNumber) async {
     emit(SignUpProviderLoading());
     try {
       final provider = await signUpProviderWeb.SignUpProvider(
-          Name, email, password, confirmPassword, commercialNumber);
+          email, Name, password, confirmPassword, commercialNumber);
       final prefs = await SharedPreferences.getInstance();
       final String? message = prefs.getString('message');
       print('$message');

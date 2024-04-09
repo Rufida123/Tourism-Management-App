@@ -15,7 +15,7 @@ final class UserAccVerifiSuccess extends UserAccVerificationState {
 }
 
 final class UserAccVerifiFailure extends UserAccVerificationState {
-  final String errorMessage;
+  final String message;
 
-  UserAccVerifiFailure(this.errorMessage);
+  UserAccVerifiFailure(this.message);
 }

@@ -12,7 +12,7 @@ class ProviderSignUpPage extends StatelessWidget {
 
   late Size mediaSize;
 
-  TextEditingController NameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
 
@@ -134,8 +134,8 @@ class ProviderSignUpPage extends StatelessWidget {
               fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 20),
-        _buildGreyField("First Name"),
-        _buildInputField(NameController),
+        _buildGreyField("Name"),
+        _buildInputField(nameController),
         const SizedBox(height: 20),
         _buildGreyField("Email Address"),
         _buildInputField(emailController),
@@ -146,7 +146,7 @@ class ProviderSignUpPage extends StatelessWidget {
         _buildGreyField("Confirm Password"),
         _buildInputField(confirmPasswordController, isPassword: true),
         const SizedBox(height: 20),
-        _buildGreyField("Phone Number"),
+        _buildGreyField("Commertial Number"),
         _buildInputField(commercialNumberController),
         const SizedBox(height: 20),
         _buildLoginButton(context),
@@ -208,12 +208,12 @@ class ProviderSignUpPage extends StatelessWidget {
     return ElevatedButton(
       onPressed: () async {
         BlocProvider.of<SignUpProviderCubit>(context).cubitProviderSignUP(
-            NameController.text,
             emailController.text,
+            nameController.text,
             passwordController.text,
             confirmPasswordController.text,
             commercialNumberController.text);
-             Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ProviderAccVerification()),
         );

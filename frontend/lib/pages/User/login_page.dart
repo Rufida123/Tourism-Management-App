@@ -35,14 +35,18 @@ class UserLoginPage extends StatelessWidget {
         } else if (state is LoginUserSuccess) {
           Navigator.pushNamed(context, '/ServiceProviding');
           isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.user.message), // Use the message from the model
+            duration: Duration(seconds: 2),
+          ));
         } else if (state is LoginUserFailure) {
+          isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Login failed: ${state.errorMessage}'),
+              content: Text(state.message), // Use the message from the model
               duration: Duration(seconds: 2),
             ),
           );
-          isLoading = false;
         }
       },
       builder: (context, state) {
@@ -222,7 +226,6 @@ class UserLoginPage extends StatelessWidget {
         BlocProvider.of<LoginUserCubit>(context)
             .cubitUserLogin(emailController.text, passwordController.text);
       },
-      //navigateServiceProvidingPage,
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
         elevation: 20,

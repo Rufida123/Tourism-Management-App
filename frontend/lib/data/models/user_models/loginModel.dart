@@ -22,8 +22,6 @@ class LoginUserRespnseModel {
 
   factory LoginUserRespnseModel.fromJson(Map<String, dynamic> json) {
     return LoginUserRespnseModel(
-        token: json['token'],
-        message: json['message'].toString(),
-        status: json['status']);
+        token: json['token'], message: json['message'], status: json['status']);
   }
 }

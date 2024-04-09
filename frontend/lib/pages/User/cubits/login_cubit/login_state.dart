@@ -13,7 +13,7 @@ class LoginUserSuccess extends LoginUserState {
 }
 
 class LoginUserFailure extends LoginUserState {
-  final String errorMessage;
+  final String message;
 
-  LoginUserFailure(this.errorMessage);
+  LoginUserFailure(this.message);
 }

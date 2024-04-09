@@ -2,11 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/pages/User/cubits/verification_cubit/account_verification_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/verification_cubit/account_verification_state.dart';
-import 'package:tourism_app/pages/User/login_page.dart';
 
 class UserAccVerification extends StatelessWidget {
   UserAccVerification({Key? key}) : super(key: key);
-  TextEditingController codeController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController codeController1 = TextEditingController();
+  TextEditingController codeController2 = TextEditingController();
+  TextEditingController codeController3 = TextEditingController();
+  TextEditingController codeController4 = TextEditingController();
+  TextEditingController codeController5 = TextEditingController();
+  TextEditingController codeController6 = TextEditingController();
+
+  String getCompleteCode() {
+    return codeController1.text +
+        codeController2.text +
+        codeController3.text +
+        codeController4.text +
+        codeController5.text +
+        codeController6.text;
+  }
+
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -15,16 +31,20 @@ class UserAccVerification extends StatelessWidget {
         if (state is UserAccVerifiLoading) {
           isLoading = true;
         } else if (state is UserAccVerifiSuccess) {
-          Navigator.pushNamed(context, '/ServiceProviding');
+          Navigator.pushNamed(context, '/UserLogin');
           isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.user.message), // Use the message from the model
+            duration: Duration(seconds: 2),
+          ));
         } else if (state is UserAccVerifiFailure) {
+          isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Login failed: ${state.errorMessage}'),
+              content: Text(state.message), // Use the message from the model
               duration: Duration(seconds: 2),
             ),
           );
-          isLoading = false;
         }
       },
       builder: (context, state) {
@@ -52,13 +72,30 @@ class UserAccVerification extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 children: [
                   SizedBox(height: 50),
+                  TextFormField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText:
+                          'Enter the email you have signed up with', // Label for the email field
+                      hintText: 'Enter your email',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
                         width: 50,
                         child: TextFormField(
-                          controller: codeController,
+                          controller: codeController1,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           maxLength: 1,
@@ -72,7 +109,7 @@ class UserAccVerification extends StatelessWidget {
                       SizedBox(
                         width: 50,
                         child: TextFormField(
-                          controller: codeController,
+                          controller: codeController2,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           maxLength: 1,
@@ -86,7 +123,7 @@ class UserAccVerification extends StatelessWidget {
                       SizedBox(
                         width: 50,
                         child: TextFormField(
-                          controller: codeController,
+                          controller: codeController3,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           maxLength: 1,
@@ -100,7 +137,7 @@ class UserAccVerification extends StatelessWidget {
                       SizedBox(
                         width: 50,
                         child: TextFormField(
-                          controller: codeController,
+                          controller: codeController4,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           maxLength: 1,
@@ -114,7 +151,7 @@ class UserAccVerification extends StatelessWidget {
                       SizedBox(
                         width: 50,
                         child: TextFormField(
-                          controller: codeController,
+                          controller: codeController5,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           maxLength: 1,
@@ -128,7 +165,7 @@ class UserAccVerification extends StatelessWidget {
                       SizedBox(
                         width: 50,
                         child: TextFormField(
-                          controller: codeController,
+                          controller: codeController6,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           maxLength: 1,
@@ -146,11 +183,9 @@ class UserAccVerification extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserLoginPage()),
-                        );
+                        BlocProvider.of<UserAccVerifiCubit>(context)
+                            .cubitUserAccVerifi(
+                                getCompleteCode(), emailController.text);
                       },
                       child: Text(
                         'Verification',
