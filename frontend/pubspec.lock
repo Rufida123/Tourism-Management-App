@@ -312,6 +312,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
+  shared_state:
+    dependency: "direct main"
+    description:
+      name: shared_state
+      sha256: "6f03208315b2f6ffa728a704aa899f3daffb5e81723a4ece992d70518a06ff3a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

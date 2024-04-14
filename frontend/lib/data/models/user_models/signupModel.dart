@@ -1,4 +1,4 @@
-class SignUpUserRequestModel {
+class SignUpUserModel {
   final String email;
   final String firstName;
   final String lastName;
@@ -6,7 +6,7 @@ class SignUpUserRequestModel {
   final String confirmPassword;
   final String phone;
 
-  SignUpUserRequestModel(
+  SignUpUserModel(
       {required this.email,
       required this.firstName,
       required this.lastName,
@@ -23,15 +23,5 @@ class SignUpUserRequestModel {
       'password_confirmation': confirmPassword,
       'phone': phone
     };
-  }
-}
-
-class SignUPUserResponseModel {
-  final String message;
-
-  SignUPUserResponseModel({required this.message});
-
-  factory SignUPUserResponseModel.fromJson(Map<String, dynamic> json) {
-    return SignUPUserResponseModel(message: json['message']);
   }
 }

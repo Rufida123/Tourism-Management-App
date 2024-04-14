@@ -1,7 +1,7 @@
-class AccVerifiUserRequestModel {
+class AccVerifiUserModel {
   String email;
   String code;
-  AccVerifiUserRequestModel({
+  AccVerifiUserModel({
     required this.email,
     required this.code,
   });
@@ -10,15 +10,5 @@ class AccVerifiUserRequestModel {
       'email': email,
       'code': code,
     };
-  }
-}
-
-class AccVerifiUserResponseModel {
-  final String message;
-
-  AccVerifiUserResponseModel({required this.message});
-
-  factory AccVerifiUserResponseModel.fromJson(Map<String, String> json) {
-    return AccVerifiUserResponseModel(message: json['message'].toString());
   }
 }

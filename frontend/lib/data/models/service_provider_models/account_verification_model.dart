@@ -1,7 +1,7 @@
-class AccVerifiProviderRequestModel {
+class AccVerifiProviderModel {
   String email;
   String code;
-  AccVerifiProviderRequestModel({
+  AccVerifiProviderModel({
     required this.email,
     required this.code,
   });
@@ -10,15 +10,5 @@ class AccVerifiProviderRequestModel {
       'email': email,
       'code': code,
     };
-  }
-}
-
-class AccVerifiProviderResponseModel {
-  final String message;
-
-  AccVerifiProviderResponseModel({required this.message});
-
-  factory AccVerifiProviderResponseModel.fromJson(Map<String, String> json) {
-    return AccVerifiProviderResponseModel(message: json['message'].toString());
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourism_app/pages/User/cubits/verification_cubit/account_verification_cubit.dart';
-import 'package:tourism_app/pages/User/cubits/verification_cubit/account_verification_state.dart';
+import 'package:tourism_app/components/shared_state_manager.dart';
+import 'package:tourism_app/pages/User/cubits/account_verification_cubit/account_verification_cubit.dart';
+import 'package:tourism_app/pages/User/cubits/account_verification_cubit/account_verification_state.dart';
 
 class UserAccVerification extends StatelessWidget {
   UserAccVerification({Key? key}) : super(key: key);
 
-  TextEditingController emailController = TextEditingController();
   TextEditingController codeController1 = TextEditingController();
   TextEditingController codeController2 = TextEditingController();
   TextEditingController codeController3 = TextEditingController();
@@ -34,7 +34,7 @@ class UserAccVerification extends StatelessWidget {
           Navigator.pushNamed(context, '/UserLogin');
           isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(state.user.message), // Use the message from the model
+            content: Text(''), // Use the message from the model
             duration: Duration(seconds: 2),
           ));
         } else if (state is UserAccVerifiFailure) {
@@ -71,23 +71,6 @@ class UserAccVerification extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                  SizedBox(height: 50),
-                  TextFormField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText:
-                          'Enter the email you have signed up with', // Label for the email field
-                      hintText: 'Enter your email',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
-                  ),
                   SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -183,9 +166,13 @@ class UserAccVerification extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        BlocProvider.of<UserAccVerifiCubit>(context)
-                            .cubitUserAccVerifi(
-                                getCompleteCode(), emailController.text);
+                        final email = userSharedEmail.getEmail();
+                        if (email != null) {
+                          BlocProvider.of<UserAccVerifiCubit>(context)
+                              .cubitUserAccVerifi(getCompleteCode(), email);
+                        } else {
+                          print("something went wrong,sign up again");
+                        }
                       },
                       child: Text(
                         'Verification',

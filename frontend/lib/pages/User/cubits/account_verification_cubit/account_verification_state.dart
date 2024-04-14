@@ -8,11 +8,7 @@ final class UserAccVerifiInitial extends UserAccVerificationState {}
 
 final class UserAccVerifiLoading extends UserAccVerificationState {}
 
-final class UserAccVerifiSuccess extends UserAccVerificationState {
-  final AccVerifiUserResponseModel user;
-
-  UserAccVerifiSuccess(this.user);
-}
+final class UserAccVerifiSuccess extends UserAccVerificationState {}
 
 final class UserAccVerifiFailure extends UserAccVerificationState {
   final String message;

@@ -4,20 +4,15 @@ import 'package:tourism_app/constants/constants.dart';
 import 'package:tourism_app/data/models/user_models/signupModel.dart';
 
 class SignUpUserWeb {
-  Future<SignUPUserResponseModel> SignUpUser(
-      String email,
-      String firstName,
-      String lastName,
-      String password,
-      String confirmPassword,
-      String phone) async {
+  Future<void> SignUpUser(String email, String firstName, String lastName,
+      String password, String confirmPassword, String phone) async {
     final url = Uri.parse('$baseUrl/register');
     final response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(SignUpUserRequestModel(
+      body: jsonEncode(SignUpUserModel(
               email: email,
               firstName: firstName,
               lastName: lastName,
@@ -29,11 +24,19 @@ class SignUpUserWeb {
 
     if (response.statusCode == 201) {
       final responseBody = jsonDecode(response.body);
-      final String message = responseBody['message'];
-      return SignUPUserResponseModel.fromJson(jsonDecode(response.body));
+      print(responseBody);
+    } else if (response.statusCode == 302) {
+      throw UserAlreadyExistsException('The email already exists.');
     } else {
       print(response.statusCode.toString());
-      throw Exception('Failed to signUp');
     }
   }
+}
+
+class UserAlreadyExistsException implements Exception {
+  final String message;
+  UserAlreadyExistsException(this.message);
+
+  @override
+  String toString() => message;
 }

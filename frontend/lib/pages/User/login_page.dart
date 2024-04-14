@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_app/components/custom_snackbar.dart';
 import 'package:tourism_app/components/navigation_service.dart';
 import 'package:tourism_app/pages/User/cubits/login_cubit/login_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/login_cubit/login_state.dart';
@@ -12,12 +13,10 @@ class UserLoginPage extends StatelessWidget {
   TextEditingController passwordController = TextEditingController();
   bool rememberUser = false;
 
+  final _formKey = GlobalKey<FormState>();
+
   void navigateToSignUpPage() {
     navigatorKey.currentState?.pushNamed('/UserSignUp');
-  }
-
-  void navigateServiceProvidingPage() {
-    navigatorKey.currentState?.pushNamed('/ServiceProviding');
   }
 
   void navigateToForgotPassword() {
@@ -33,20 +32,13 @@ class UserLoginPage extends StatelessWidget {
         if (state is LoginUserLoading) {
           isLoading = true;
         } else if (state is LoginUserSuccess) {
-          Navigator.pushNamed(context, '/ServiceProviding');
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/ServiceProviding', (Route<dynamic> route) => false);
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(state.user.message), // Use the message from the model
-            duration: Duration(seconds: 2),
-          ));
+          showCustomSnackBar(context, 'Welcome!');
         } else if (state is LoginUserFailure) {
+          showCustomSnackBar(context, state.errorMessage);
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message), // Use the message from the model
-              duration: Duration(seconds: 2),
-            ),
-          );
         }
       },
       builder: (context, state) {
@@ -121,48 +113,72 @@ class UserLoginPage extends StatelessWidget {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Welcome",
-          style: TextStyle(
-              color: Color.fromARGB(255, 8, 145, 125),
-              fontSize: 32,
-              fontWeight: FontWeight.w500),
-        ),
-        _buildGreyText("Please login with your information"),
-        const SizedBox(height: 60),
-        _buildGreyText("Email address"),
-        _buildInputField(emailController),
-        const SizedBox(height: 40),
-        _buildGreyText("Password"),
-        _buildInputField(passwordController, isPassword: true),
-        const SizedBox(height: 20),
-        _buildRememberForgot(),
-        const SizedBox(height: 20),
-        _buildLoginButton(context),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Don't have an account? ",
-              style: TextStyle(color: Colors.grey),
-            ),
-            TextButton(
-              onPressed: navigateToSignUpPage,
-              child: const Text(
-                "Sign Up",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 8, 145, 125),
-                  fontWeight: FontWeight.bold,
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Welcome",
+            style: TextStyle(
+                color: Color.fromARGB(255, 8, 145, 125),
+                fontSize: 32,
+                fontWeight: FontWeight.w500),
+          ),
+          _buildGreyText("Please login with your information"),
+          const SizedBox(height: 60),
+          _buildGreyText("Email address"),
+          _buildInputField(
+            emailController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter an email';
+              } else if (!value.contains('@')) {
+                return 'Please enter a valid email';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 40),
+          _buildGreyText("Password"),
+          _buildInputField(
+            passwordController,
+            isPassword: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a password';
+              } else if (value.length < 8) {
+                return 'Password must be at least 8 characters long';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          _buildRememberForgot(),
+          const SizedBox(height: 20),
+          _buildLoginButton(context),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Don't have an account? ",
+                style: TextStyle(color: Colors.grey),
+              ),
+              TextButton(
+                onPressed: navigateToSignUpPage,
+                child: const Text(
+                  "Sign Up",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 8, 145, 125),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -173,9 +189,12 @@ class UserLoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField(TextEditingController controller,
-      {bool isPassword = false}) {
-    return TextField(
+  Widget _buildInputField(
+    TextEditingController controller, {
+    bool isPassword = false,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
       controller: controller,
       style: const TextStyle(color: Color.fromARGB(255, 8, 145, 125)),
       decoration: InputDecoration(
@@ -192,6 +211,7 @@ class UserLoginPage extends StatelessWidget {
             : const Icon(Icons.done),
       ),
       obscureText: isPassword,
+      validator: validator,
     );
   }
 
@@ -223,8 +243,10 @@ class UserLoginPage extends StatelessWidget {
   Widget _buildLoginButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        BlocProvider.of<LoginUserCubit>(context)
-            .cubitUserLogin(emailController.text, passwordController.text);
+        if (_formKey.currentState!.validate()) {
+          BlocProvider.of<LoginUserCubit>(context)
+              .cubitUserLogin(emailController.text, passwordController.text);
+        }
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),

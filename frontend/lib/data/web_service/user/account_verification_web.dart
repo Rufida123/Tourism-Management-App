@@ -4,21 +4,18 @@ import 'package:tourism_app/data/models/user_models/account_verification_model.d
 import 'package:http/http.dart' as http;
 
 class AccVerifiUserWeb {
-  Future<AccVerifiUserResponseModel> accVerifiUser(
-      String email, String code) async {
+  Future<void> accVerifiUser(String email, String code) async {
     final url = Uri.parse('$baseUrl/verifyUser');
     final response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(
-          AccVerifiUserRequestModel(email: email, code: code).toJson()),
+      body: jsonEncode(AccVerifiUserModel(email: email, code: code).toJson()),
     );
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
-      final String message = responseBody['message'];
-      return AccVerifiUserResponseModel(message: message);
+      print(responseBody);
     } else {
       print(response.statusCode.toString());
       throw Exception('the code is not correct');

@@ -1,11 +1,11 @@
-class SignUpProviderRequestModel {
+class SignUpProviderModel {
   final String Name;
   final String email;
   final String password;
   final String confirmPassword;
   final String commercialNumber;
 
-  SignUpProviderRequestModel(
+  SignUpProviderModel(
       {required this.Name,
       required this.email,
       required this.password,
@@ -17,18 +17,8 @@ class SignUpProviderRequestModel {
       'provider_name': Name,
       'email': email,
       'password': password,
-      'password confirmation': confirmPassword,
+      'password_confirmation': confirmPassword,
       'commercial_register': commercialNumber
     };
-  }
-}
-
-class SignUpProviderResponseModel {
-  final String message;
-
-  SignUpProviderResponseModel({required this.message});
-
-  factory SignUpProviderResponseModel.fromJson(Map<String, dynamic> json) {
-    return SignUpProviderResponseModel(message: json['message']);
   }
 }

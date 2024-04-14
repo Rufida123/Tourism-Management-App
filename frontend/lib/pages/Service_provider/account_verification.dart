@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourism_app/pages/Service_provider/cubits/verification_cubits/account_verification_cubit.dart';
-import 'package:tourism_app/pages/Service_provider/cubits/verification_cubits/account_verification_state.dart';
+import 'package:tourism_app/components/custom_snackbar.dart';
+import 'package:tourism_app/components/shared_state_manager.dart';
+import 'package:tourism_app/pages/Service_provider/cubits/account_verification_cubits/account_verification_cubit.dart';
+import 'package:tourism_app/pages/Service_provider/cubits/account_verification_cubits/account_verification_state.dart';
 
 class ProviderAccVerification extends StatelessWidget {
   ProviderAccVerification({Key? key}) : super(key: key);
@@ -33,19 +35,11 @@ class ProviderAccVerification extends StatelessWidget {
         } else if (state is ProviderAccVerifiSuccess) {
           Navigator.pushNamed(context, '/ProviderLogin');
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content:
-                Text(state.provider.message), // Use the message from the model
-            duration: Duration(seconds: 2),
-          ));
+          showCustomSnackBar(
+              context, 'email verified successfully please login');
         } else if (state is ProviderAccVerifiFailure) {
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message), // Use the message from the model
-              duration: Duration(seconds: 2),
-            ),
-          );
+          showCustomSnackBar(context, 'the code is incorrect');
         }
       },
       builder: (context, state) {
@@ -72,23 +66,6 @@ class ProviderAccVerification extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                  SizedBox(height: 50),
-                  TextFormField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText:
-                          'Enter the email you have signed up with', // Label for the email field
-                      hintText: 'Enter your email',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
-                  ),
                   SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,9 +161,13 @@ class ProviderAccVerification extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        BlocProvider.of<ProviderAccVerifiCubit>(context)
-                            .cubitProviderAccVerifi(
-                                getCompleteCode(), emailController.text);
+                        final email = providerSharedEmail.getEmail();
+                        if (email != null) {
+                          BlocProvider.of<ProviderAccVerifiCubit>(context)
+                              .cubitProviderAccVerifi(getCompleteCode(), email);
+                        } else {
+                          print("something went wrong,sign up again");
+                        }
                       },
                       child: Text(
                         'Verification',

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_app/components/custom_snackbar.dart';
 import 'package:tourism_app/components/navigation_service.dart';
+import 'package:tourism_app/components/shared_state_manager.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_state.dart';
 
@@ -12,20 +14,17 @@ class UserSignUpPage extends StatelessWidget {
   late Size mediaSize;
 
   TextEditingController firstNameController = TextEditingController();
-
   TextEditingController lastNameController = TextEditingController();
-
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
-
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
   bool rememberUser = false;
   bool isLoading = false;
+  final _formKey = GlobalKey<FormState>();
   void navigateTologinPage() {
-    navigatorKey.currentState?.pushNamed('/UserLogin');
+    navigatorKey.currentState?.pushReplacementNamed('/UserLogin');
   }
 
   @override
@@ -37,23 +36,14 @@ class UserSignUpPage extends StatelessWidget {
         if (state is SignUpUserLoading) {
           isLoading = true;
         } else if (state is SignUpUserSuccess) {
-          Navigator.pushNamed(context, '/UserAccVerification');
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/UserAccVerification', (Route<dynamic> route) => false);
+          showCustomSnackBar(
+              context, 'A code was sent to your Email please verifiy');
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content:
-                  Text(state.user.message), // Use the message from the model
-              duration: Duration(seconds: 2),
-            ),
-          );
         } else if (state is SignUpUserFailure) {
+          showCustomSnackBar(context, state.errorMessage);
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message), // Use the message from the model
-              duration: Duration(seconds: 2),
-            ),
-          );
         }
       },
       builder: (context, state) {
@@ -127,75 +117,132 @@ class UserSignUpPage extends StatelessWidget {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Sign Up",
-          style: TextStyle(
-              color: Color.fromARGB(255, 8, 145, 125),
-              fontSize: 32,
-              fontWeight: FontWeight.w500),
-        ),
-        const SizedBox(height: 40),
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildGreyField("First Name"),
-                  _buildInputField(firstNameController),
-                ],
-              ),
-            ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildGreyField("Last Name"),
-                  _buildInputField(lastNameController),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        _buildGreyField("Email Address"),
-        _buildInputField(emailController),
-        const SizedBox(height: 20),
-        _buildGreyField("Password"),
-        _buildInputField(passwordController, isPassword: true),
-        const SizedBox(height: 20),
-        _buildGreyField("Confirm Password"),
-        _buildInputField(confirmPasswordController, isPassword: true),
-        const SizedBox(height: 20),
-        _buildGreyField("Phone Number"),
-        _buildInputField(phoneController),
-        const SizedBox(height: 20),
-        _buildLoginButton(context),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Already have an account? ",
-              style: TextStyle(color: Colors.grey),
-            ),
-            TextButton(
-              onPressed: navigateTologinPage,
-              child: const Text(
-                "Login",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 8, 145, 125),
-                  fontWeight: FontWeight.bold,
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Sign Up",
+            style: TextStyle(
+                color: Color.fromARGB(255, 8, 145, 125),
+                fontSize: 32,
+                fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 40),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildGreyField("First Name"),
+                    _buildInputField(firstNameController, validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a First Name';
+                      }
+                      return null;
+                    }),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildGreyField("Last Name"),
+                    _buildInputField(lastNameController, validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a Last Name';
+                      }
+                      return null;
+                    }),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          _buildGreyField("Email Address"),
+          _buildInputField(
+            emailController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter an email';
+              } else if (!value.contains('@')) {
+                return 'Please enter a valid email';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          _buildGreyField("Password"),
+          _buildInputField(
+            passwordController,
+            isPassword: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a password';
+              } else if (value.length < 8) {
+                return 'Password must be at least 8 characters long';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          _buildGreyField("Confirm Password"),
+          _buildInputField(
+            confirmPasswordController,
+            isPassword: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a password';
+              } else if (value.length < 8) {
+                return 'Password must be at least 8 characters long';
+              } else if (value != passwordController.text) {
+                return 'Passwords do not match';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          _buildGreyField("Phone Number"),
+          _buildInputField(
+            phoneController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a phone number';
+              } else if (value.length < 10) {
+                return 'Password must be at least 10 numbers long';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          _buildLoginButton(context),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Already have an account? ",
+                style: TextStyle(color: Colors.grey),
+              ),
+              TextButton(
+                onPressed: navigateTologinPage,
+                child: const Text(
+                  "Login",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 8, 145, 125),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -209,9 +256,12 @@ class UserSignUpPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField(TextEditingController controller,
-      {bool isPassword = false}) {
-    return TextField(
+  Widget _buildInputField(
+    TextEditingController controller, {
+    bool isPassword = false,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
       controller: controller,
       style: const TextStyle(color: Color.fromARGB(255, 8, 145, 125)),
       decoration: InputDecoration(
@@ -226,19 +276,28 @@ class UserSignUpPage extends StatelessWidget {
         suffixIcon: isPassword ? const Icon(Icons.remove_red_eye) : null,
       ),
       obscureText: isPassword,
+      validator: validator,
     );
   }
 
   Widget _buildLoginButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        BlocProvider.of<SignUpUserCubit>(context).cubitUserSignUP(
-            emailController.text,
-            firstNameController.text,
-            lastNameController.text,
-            passwordController.text,
-            confirmPasswordController.text,
-            phoneController.text);
+        if (_formKey.currentState!.validate()) {
+          final email = emailController.text;
+          if (email.isNotEmpty) {
+            final email = userSharedEmail.setEmail(emailController.text);
+            BlocProvider.of<SignUpUserCubit>(context).cubitUserSignUP(
+                emailController.text,
+                firstNameController.text,
+                lastNameController.text,
+                passwordController.text,
+                confirmPasswordController.text,
+                phoneController.text);
+          } else {
+            print("Email is empty, please enter your email and try again.");
+          }
+        }
       },
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),

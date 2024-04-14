@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:tourism_app/data/web_service/user/signUp_web.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_state.dart';
@@ -10,11 +12,19 @@ class SignUpUserCubit extends Cubit<SignUpUserState> {
       String password, String confirmPassword, String phone) async {
     emit(SignUpUserLoading());
     try {
-      final user = await signUpUserWeb.SignUpUser(
+      await signUpUserWeb.SignUpUser(
           email, firstName, lastName, password, confirmPassword, phone);
-      print(user.message);
+      // userSharedState.setEmail(email);
 
-      emit(SignUpUserSuccess(user));
+      emit(SignUpUserSuccess());
+    } on SocketException {
+      emit(SignUpUserFailure('No internet connection.'));
+    } on HttpException catch (e) {
+      if (e.message.contains('email already exists!! (and 1 more error)')) {
+        emit(SignUpUserFailure('The email already exists.'));
+      } else {
+        emit(SignUpUserFailure(e.toString()));
+      }
     } on Exception catch (e) {
       emit(SignUpUserFailure(e.toString()));
     }

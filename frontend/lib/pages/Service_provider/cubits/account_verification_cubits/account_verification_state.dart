@@ -9,13 +9,11 @@ final class ProviderAccVerifiInitial extends ProviderAccVerificationState {}
 final class ProviderAccVerifiLoading extends ProviderAccVerificationState {}
 
 final class ProviderAccVerifiSuccess extends ProviderAccVerificationState {
-  final AccVerifiProviderResponseModel provider;
-
-  ProviderAccVerifiSuccess(this.provider);
+  
 }
 
 final class ProviderAccVerifiFailure extends ProviderAccVerificationState {
-  final String message;
+  final String errorMessage;
 
-  ProviderAccVerifiFailure(this.message);
+  ProviderAccVerifiFailure(this.errorMessage);
 }

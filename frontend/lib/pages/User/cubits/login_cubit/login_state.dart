@@ -6,14 +6,10 @@ class LoginUserInitial extends LoginUserState {}
 
 class LoginUserLoading extends LoginUserState {}
 
-class LoginUserSuccess extends LoginUserState {
-  final LoginUserRespnseModel user;
-
-  LoginUserSuccess(this.user);
-}
+class LoginUserSuccess extends LoginUserState {}
 
 class LoginUserFailure extends LoginUserState {
-  final String message;
+  final String errorMessage;
 
-  LoginUserFailure(this.message);
+  LoginUserFailure(this.errorMessage);
 }
