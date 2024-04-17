@@ -1,5 +1,6 @@
-import 'package:tourism_app/data/models/user_models/loginModel.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 abstract class LoginUserState {}
 
 class LoginUserInitial extends LoginUserState {}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_app/components/custom_snackbar.dart';
 import 'package:tourism_app/components/shared_state_manager.dart';
 import 'package:tourism_app/pages/User/cubits/account_verification_cubit/account_verification_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/account_verification_cubit/account_verification_state.dart';
@@ -34,17 +35,12 @@ class UserAccVerification extends StatelessWidget {
           Navigator.pushNamed(context, '/UserLogin');
           isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(''), // Use the message from the model
+            content: Text('Email was verified successfully please login'),
             duration: Duration(seconds: 2),
           ));
         } else if (state is UserAccVerifiFailure) {
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message), // Use the message from the model
-              duration: Duration(seconds: 2),
-            ),
-          );
+          showCustomSnackBar(context, 'the code is incorrect');
         }
       },
       builder: (context, state) {

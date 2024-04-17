@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/components/shared_state_manager.dart';
 import 'package:tourism_app/pages/User/cubits/password_cubit/password_verification_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/password_cubit/password_verification_state.dart';
-import 'package:tourism_app/pages/User/reset_password.dart';
 
 class UserPassVerification extends StatelessWidget {
   UserPassVerification({Key? key}) : super(key: key);

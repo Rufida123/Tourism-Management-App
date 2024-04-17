@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tourism_app/data/models/user_models/account_verification_model.dart';
 
 @immutable
 abstract class UserAccVerificationState {}

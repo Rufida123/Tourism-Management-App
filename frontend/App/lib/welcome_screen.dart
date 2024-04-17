@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tourism_app/pages/Service_provider/login_page.dart';
-import 'package:tourism_app/pages/User/login_page.dart';
+import 'package:tourism_app/pages/Service_provider/Authentication/login_page.dart';
+import 'package:tourism_app/pages/User/Authentication/login_page.dart';
 
 class WelcomePage extends StatelessWidget {
   WelcomePage({Key? key}) : super(key: key);

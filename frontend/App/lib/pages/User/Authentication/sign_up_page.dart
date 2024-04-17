@@ -3,46 +3,45 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/components/custom_snackbar.dart';
 import 'package:tourism_app/components/navigation_service.dart';
 import 'package:tourism_app/components/shared_state_manager.dart';
-import 'package:tourism_app/pages/Service_provider/cubits/sign_up_cubit/sign_up_cubit.dart';
-import 'package:tourism_app/pages/Service_provider/cubits/sign_up_cubit/sign_up_state.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_state.dart';
 
-class ProviderSignUpPage extends StatelessWidget {
-  ProviderSignUpPage({Key? key}) : super(key: key);
+class UserSignUpPage extends StatelessWidget {
+  UserSignUpPage({Key? key}) : super(key: key);
 
   late Color myColor;
 
   late Size mediaSize;
 
-  TextEditingController NameController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  TextEditingController commertialNumberController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   bool rememberUser = false;
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   void navigateTologinPage() {
-    navigatorKey.currentState?.pushReplacementNamed('/ProviderLogin');
+    navigatorKey.currentState?.pushReplacementNamed('/UserLogin');
   }
 
   @override
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
     mediaSize = MediaQuery.of(context).size;
-    return BlocConsumer<SignUpProviderCubit, SignUpProviderState>(
+    return BlocConsumer<SignUpUserCubit, SignUpUserState>(
       listener: (context, state) {
-        if (state is SignUpProviderLoading) {
+        if (state is SignUpUserLoading) {
           isLoading = true;
-        } else if (state is SignUpProviderSuccess) {
-          Navigator.pushNamedAndRemoveUntil(context, '/ProviderAccVerification',
-              (Route<dynamic> route) => false);
+        } else if (state is SignUpUserSuccess) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/UserAccVerification', (Route<dynamic> route) => false);
           showCustomSnackBar(
               context, 'A code was sent to your Email please verifiy');
           isLoading = false;
-        } else if (state is SignUpProviderFailure) {
+        } else if (state is SignUpUserFailure) {
           showCustomSnackBar(context, state.errorMessage);
           isLoading = false;
         }
@@ -131,13 +130,39 @@ class ProviderSignUpPage extends StatelessWidget {
                 fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 40),
-          _buildGreyField("First Name"),
-          _buildInputField(NameController, validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter a First Name';
-            }
-            return null;
-          }),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildGreyField("First Name"),
+                    _buildInputField(firstNameController, validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a First Name';
+                      }
+                      return null;
+                    }),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildGreyField("Last Name"),
+                    _buildInputField(lastNameController, validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a Last Name';
+                      }
+                      return null;
+                    }),
+                  ],
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 20),
           _buildGreyField("Email Address"),
           _buildInputField(
@@ -184,7 +209,7 @@ class ProviderSignUpPage extends StatelessWidget {
           const SizedBox(height: 20),
           _buildGreyField("Phone Number"),
           _buildInputField(
-            commertialNumberController,
+            phoneController,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter a phone number';
@@ -261,13 +286,14 @@ class ProviderSignUpPage extends StatelessWidget {
         if (_formKey.currentState!.validate()) {
           final email = emailController.text;
           if (email.isNotEmpty) {
-            final email = providerSharedEmail.setEmail(emailController.text);
-            BlocProvider.of<SignUpProviderCubit>(context).cubitProviderSignUP(
+            userSharedEmail.setEmail(emailController.text);
+            BlocProvider.of<SignUpUserCubit>(context).cubitUserSignUP(
                 emailController.text,
-                NameController.text,
+                firstNameController.text,
+                lastNameController.text,
                 passwordController.text,
                 confirmPasswordController.text,
-                commertialNumberController.text);
+                phoneController.text);
           } else {
             print("Email is empty, please enter your email and try again.");
           }

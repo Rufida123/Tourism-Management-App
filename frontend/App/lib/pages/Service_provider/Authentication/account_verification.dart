@@ -36,7 +36,7 @@ class ProviderAccVerification extends StatelessWidget {
           Navigator.pushNamed(context, '/ProviderLogin');
           isLoading = false;
           showCustomSnackBar(
-              context, 'email verified successfully please login');
+              context, 'Email was verified successfully please login');
         } else if (state is ProviderAccVerifiFailure) {
           isLoading = false;
           showCustomSnackBar(context, 'the code is incorrect');

@@ -13,32 +13,32 @@ import 'package:tourism_app/data/web_service/user/login_web.dart';
 import 'package:tourism_app/data/web_service/user/password_reset_web.dart';
 import 'package:tourism_app/data/web_service/user/password_verification_web.dart';
 import 'package:tourism_app/data/web_service/user/signUp_web.dart';
-import 'package:tourism_app/pages/Service_provider/account_verification.dart';
+import 'package:tourism_app/pages/Service_provider/Authentication/account_verification.dart';
 import 'package:tourism_app/pages/Service_provider/cubits/login_cubit/login_cubit.dart';
 import 'package:tourism_app/pages/Service_provider/cubits/password_cubit/forgot_password_cubit.dart';
 import 'package:tourism_app/pages/Service_provider/cubits/password_cubit/password_reset_cubit.dart';
 import 'package:tourism_app/pages/Service_provider/cubits/password_cubit/password_verification_cubit.dart';
 import 'package:tourism_app/pages/Service_provider/cubits/sign_up_cubit/sign_up_cubit.dart';
 import 'package:tourism_app/pages/Service_provider/cubits/account_verification_cubits/account_verification_cubit.dart';
-import 'package:tourism_app/pages/Service_provider/forgot_password.dart';
-import 'package:tourism_app/pages/Service_provider/login_page.dart';
-import 'package:tourism_app/pages/Service_provider/password_verification.dart';
-import 'package:tourism_app/pages/Service_provider/reset_password.dart';
-import 'package:tourism_app/pages/Service_provider/sign_up_page.dart';
-import 'package:tourism_app/pages/User/account_verification.dart';
+import 'package:tourism_app/pages/Service_provider/Authentication/forgot_password.dart';
+import 'package:tourism_app/pages/Service_provider/Authentication/login_page.dart';
+import 'package:tourism_app/pages/Service_provider/Authentication/password_verification.dart';
+import 'package:tourism_app/pages/Service_provider/Authentication/reset_password.dart';
+import 'package:tourism_app/pages/Service_provider/Authentication/sign_up_page.dart';
+import 'package:tourism_app/pages/User/Authentication/account_verification.dart';
 import 'package:tourism_app/pages/User/cubits/account_verification_cubit/account_verification_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/password_cubit/forgot_password_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/password_cubit/password_reset_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/password_cubit/password_verification_cubit.dart';
-import 'package:tourism_app/pages/User/forgot_Password.dart';
+import 'package:tourism_app/pages/User/Authentication/forgot_Password.dart';
 import 'package:tourism_app/pages/User/cubits/login_cubit/login_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/signup_cubit/cubit/signup_cubit.dart';
-import 'package:tourism_app/pages/User/login_page.dart';
+import 'package:tourism_app/pages/User/home_page.dart';
+import 'package:tourism_app/pages/User/Authentication/login_page.dart';
 import 'package:tourism_app/pages/Service_provider/service_providing.dart';
-import 'package:tourism_app/pages/User/password_verfication.dart';
-import 'package:tourism_app/pages/User/reset_password.dart';
-import 'package:tourism_app/pages/User/restaurants_list.dart';
-import 'package:tourism_app/pages/User/sign_up_page.dart';
+import 'package:tourism_app/pages/User/Authentication/password_verfication.dart';
+import 'package:tourism_app/pages/User/Authentication/reset_password.dart';
+import 'package:tourism_app/pages/User/Authentication/sign_up_page.dart';
 import 'package:tourism_app/welcome_screen.dart';
 
 void main() {
@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: const Color.fromARGB(255, 103, 194, 180),
         ),
-        home: RestaurantsList(),
+        home: WelcomePage(),
         debugShowCheckedModeBanner: false,
         routes: {
           '/UserSignUp': (context) => UserSignUpPage(),
@@ -111,6 +111,7 @@ class MyApp extends StatelessWidget {
           '/UserPassVerification': (context) => UserPassVerification(),
           '/ProviderResetPassword': (context) => ProviderResetPassword(),
           '/UserResetPassword': (context) => UserResetPassword(),
+          '/HomePage': (context) => HomePage(),
         },
       ),
     );

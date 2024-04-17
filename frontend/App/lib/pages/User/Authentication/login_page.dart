@@ -33,9 +33,9 @@ class UserLoginPage extends StatelessWidget {
           isLoading = true;
         } else if (state is LoginUserSuccess) {
           Navigator.pushNamedAndRemoveUntil(
-              context, '/ServiceProviding', (Route<dynamic> route) => false);
-          isLoading = false;
+              context, '/HomePage', (Route<dynamic> route) => false);
           showCustomSnackBar(context, 'Welcome!');
+          isLoading = false;
         } else if (state is LoginUserFailure) {
           showCustomSnackBar(context, state.errorMessage);
           isLoading = false;

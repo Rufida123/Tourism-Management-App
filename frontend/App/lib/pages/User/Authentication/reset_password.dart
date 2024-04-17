@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_app/components/shared_state_manager.dart';
 import 'package:tourism_app/pages/User/cubits/password_cubit/password_reset_cubit.dart';
 import 'package:tourism_app/pages/User/cubits/password_cubit/password_reset_state.dart';
-import 'package:tourism_app/pages/User/sign_up_page.dart';
 
 class UserResetPassword extends StatelessWidget {
   TextEditingController passwordController = TextEditingController();
